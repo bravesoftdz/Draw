@@ -1,5 +1,5 @@
 # Draw
-An in-development application for Drawing and Image Manipulation written in FreePascal using CodeTyphon and Lazarus.
+An in-development application for Drawing and Image Manipulation written in FreePascal using CodeTyphon and Lazarus by René Hickersberger.
 I've made this program back in 2013 and I was not very experienced. I think there are some bugs in it. Please let me know in the Issues tab if you found a bug, I'm interested in fixing it. I'm very busy right now, but I want to continue the project soon (but I'm not sure when).
 
 # Building
