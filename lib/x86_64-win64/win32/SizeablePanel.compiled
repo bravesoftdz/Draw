@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CONFIG>
-  <Compiler Value="C:\codetyphon\fpc\fpc64\bin\x86_64-win64\fpc.exe" Date="1221697978"/>
-  <Params Value=" -MObjFPC -Scghi -O1 -g -gl -l -vewnhibq -FuC:\codetyphon\typhon\packager\units\x86_64-win64 -FuC:\Users\H\Desktop\Draw\ -FUC:\Users\H\Desktop\Draw\lib\x86_64-win64\win32\ SizeablePanel.pas"/>
-</CONFIG>
