@@ -1,0 +1,11 @@
+*.exe
+*.dll
+*.o
+*.obj
+*.compiled
+*.ppu
+
+*.lps
+
+lib/
+*.app/
