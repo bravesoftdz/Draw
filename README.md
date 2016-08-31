@@ -5,7 +5,7 @@ I've made this program back in 2013 and I was not very experienced. I think ther
 # Building
 
   1. Download and install [Lazarus](http://www.lazarus-ide.org) or [CodeTyphon](http://www.pilotlogic.com/sitejoom/index.php/codetyphon)
-  2. Clone this repository (git clone https://github.com/ReneHSZ/Draw.git)
+  2. Clone this repository (```git clone https://github.com/ReneHSZ/Draw.git```)
   3. Open Draw.lpi with Lazarus or CodeTyphon
   4. Click on Run -> Compile to build it
   
