@@ -20,7 +20,7 @@ uses
 
 type
 
-  TTool = (Pencil, Brush);
+  TTool = (Pencil, Brush, Eraser);
 
   { TFormMain }
 
@@ -52,6 +52,7 @@ type
     PanelColor: TPanel;
     SaveDialog1: TSaveDialog;
     ToolBar1: TToolBar;
+    ToolButtonEraser: TToolButton;
     ToolButtonPencil: TToolButton;
     ToolButtonBrush: TToolButton;
     procedure cyColorGrid1BoxClick(Sender: TObject; aRow: integer; aCol: integer; aColor: TColor);
@@ -70,6 +71,7 @@ type
     procedure MenuItemSaveClick(Sender: TObject);
     procedure PanelColorClick(Sender: TObject);
     procedure ToolButtonBrushClick(Sender: TObject);
+    procedure ToolButtonEraserClick(Sender: TObject);
     procedure ToolButtonPencilClick(Sender: TObject);
   private
     { private declarations }
@@ -79,6 +81,7 @@ type
       LastX, LastY: Integer;
       drawing:      boolean;
       DefaultColor: TColor;
+      ClearColor:   TColor;
       FileName:     string;
       Tool:         TTool;
 
@@ -99,21 +102,28 @@ implementation
 
 procedure TFormMain.Image1MouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
-var c: TFPColor;
 begin
-  Image1.Canvas.Pen.Color := DefaultColor;
-  Image1.Canvas.Brush.Color := DefaultColor;
-
   if drawing then
   begin
-    if Tool=Pencil then
-    begin
-      Image1.Canvas.Line(LastX,LastY,X,Y);
-    end else
-    if Tool=TTool.Brush then
-    begin
-      Image1.Canvas.Arc(X - 15,Y - 15, X + 15, Y + 15,360,30);
-      Image1.Canvas.FloodFill(X,Y,DefaultColor, fsBorder);
+    case Tool of
+      TTool.Pencil:
+      begin
+        Image1.Canvas.Pen.Color := DefaultColor;
+        Image1.Canvas.Brush.Color := DefaultColor;
+        Image1.Canvas.Line(LastX,LastY,X,Y);
+      end;
+      TTool.Brush:
+      begin
+        Image1.Canvas.Pen.Color := DefaultColor;
+        Image1.Canvas.Brush.Color := DefaultColor;
+        Image1.Canvas.Ellipse(X-15, Y-15, X+15, Y+15);
+      end;
+      TTool.Eraser:
+      begin
+        Image1.Canvas.Pen.Color:=ClearColor;
+        Image1.Canvas.Brush.Color:=ClearColor;
+        Image1.Canvas.Ellipse(X-15, Y-15, X+15, Y+15);
+      end;
     end;
   end;
   LastX := X;
@@ -147,6 +157,8 @@ begin
 
   updateLayout;
   updateGraphics;
+
+  ClearColor := clWhite;
 end;
 
 procedure TFormMain.MenuItemOpenClick(Sender: TObject);
@@ -164,8 +176,29 @@ begin
 end;
 
 procedure TFormMain.MenuItemPrintClick(Sender: TObject);
+var
+  ScaleX, ScaleY:          Integer;
+  RR:                      TRect;
 begin
-  // TODO
+  with Printer do
+  begin
+    BeginDoc;
+
+    try
+      ScaleX := GetDeviceCaps(Handle, logPixelsX) div PixelsPerInch;
+      ScaleY := GetDeviceCaps(Handle, logPixelsY) div PixelsPerInch;
+
+      RR := Classes.Rect(0, 0, Image1.Picture.Width * scaleX, Image1.Picture.Height * ScaleY);
+      Canvas.StretchDraw(RR, Image1.Picture.Graphic);
+
+      if FileName <> '' then
+        Title:=FileName
+      else
+        Title:='Unnamed picture - Draw';
+    finally
+      EndDoc;
+    end;
+  end;
 end;
 
 procedure TFormMain.MenuItemPropertiesClick(Sender: TObject);
@@ -216,6 +249,11 @@ end;
 procedure TFormMain.ToolButtonBrushClick(Sender: TObject);
 begin
   Tool := TTool.Brush;
+end;
+
+procedure TFormMain.ToolButtonEraserClick(Sender: TObject);
+begin
+  Tool := TTool.Eraser;
 end;
 
 procedure TFormMain.ToolButtonPencilClick(Sender: TObject);

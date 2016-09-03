@@ -95,19 +95,19 @@ begin
         FileTimeToDateTime(fsLastAccessTime, lastAccessTime) and
         FileTimeToDateTime(fsLastModificationTime, lastModificationTime);
       CloseHandle(fileHandle);
-  except on E:Exception do Result := false;
+  except on E:Exception do GetFileTimes := false;
   end;
 end;
 
 function GetSizeOfFile(FileName: string): Int64;
 var
-  Handle: Integer;
+  Handle: THandle;
 begin
   Handle := FileOpen(FileName, fmOpenRead);
 
-  if Handle = -1 then
+  if Handle = 0 then
   begin
-    Result := -1;
+    Result := 0;
     exit;
   end
   else try
